@@ -124,14 +124,32 @@ ny_noaa_tidy = ny_noaa %>%
   
 ```
 
+Part 3(i) - tmax vs tmin graph
 ```{r}
-ny_noaa_tidy %>%
+tmin_tmax_plot = ny_noaa_tidy %>%
   filter(!is.na(tmax), !is.na(tmin)) %>%
-  ggplot(aes(x = tmax, y = tmin)) + geom_hex() + 
+  ggplot(aes(x = tmax, y = tmin)) + 
+  geom_hex() + 
   labs(title = "Comparison of Min and Max Temperatures in NY (1981-2010)",
        x = "Max Temp (C)",
        y = "Min Temp (C)"
        )
+```
+
+Part 3(ii) - plot showing distributino of snowfall values greater than 0 and less than 100 per year
+```{r}
+snowfall_plot = ny_noaa_tidy %>%
+  filter(snow > 0, snow < 100) %>%
+  ggplot(aes(x = snow, color = factor(year))) +
+  geom_density(alpha = 0.05) +
+  labs(title = "Distribution of Snowfall Values Between 0 and 100 in NY (1981-2010)",
+       x = "Snowfall (mm)",
+       y = "Density"
+       )
+```
+Combine individual plots into two-panel plot
+```{r}
+tmin_tmax_plot + snowfall_plot
 ```
 
 
