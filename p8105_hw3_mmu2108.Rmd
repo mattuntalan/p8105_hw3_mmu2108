@@ -119,8 +119,19 @@ Tidy data
 ```{r}
 ny_noaa_tidy = ny_noaa %>%
   janitor::clean_names() %>%
-  separate(date, into = c("year", "month", "day"), sep = "-")
+  separate(date, into = c("year", "month", "day"), sep = "-") %>%
+  mutate(prcp = as.numeric(prcp)/10, tmax = as.numeric(tmax)/10, tmin = as.numeric(tmin)/10)
   
+```
+
+```{r}
+ny_noaa_tidy %>%
+  filter(!is.na(tmax), !is.na(tmin)) %>%
+  ggplot(aes(x = tmax, y = tmin)) + geom_hex() + 
+  labs(title = "Comparison of Min and Max Temperatures in NY (1981-2010)",
+       x = "Max Temp (C)",
+       y = "Min Temp (C)"
+       )
 ```
 
 
