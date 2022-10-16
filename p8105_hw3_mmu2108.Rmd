@@ -95,11 +95,16 @@ instacart %>%
 
 ### Problem 2
 ```{r}
-accel = read_csv("./accel_data.csv") %>%
+accel_tidy = read_csv("./accel_data.csv") %>%
   janitor::clean_names() %>%
   mutate(day_type = character(length = 35)) %>%
   mutate(day_type = ifelse(day == "Saturday" | day == "Sunday", "Weekend", "Weekday")) %>%
-  select(day_type, everything())
+  mutate(total_activity = rowSums(accel_tidy[,c(4:1443)])) %>%
+  select(total_activity, day_type, everything())
+```
+
+```{r}
 
 ```
+
 
