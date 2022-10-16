@@ -94,6 +94,7 @@ instacart %>%
 
 
 ### Problem 2
+First part- Import accelerometer data, tidy, classify weekends/weekdays, and sum activity scores
 ```{r}
 accel_tidy = read_csv("./accel_data.csv") %>%
   janitor::clean_names() %>%
@@ -106,5 +107,21 @@ accel_tidy = read_csv("./accel_data.csv") %>%
 ```{r}
 
 ```
+
+### Problem 3
+Load NOAA data
+```{r}
+library(p8105.datasets)
+data("ny_noaa")
+```
+
+Tidy data
+```{r}
+ny_noaa_tidy = ny_noaa %>%
+  janitor::clean_names() %>%
+  separate(date, into = c("year", "month", "day"), sep = "-")
+  
+```
+
 
 
