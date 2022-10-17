@@ -145,6 +145,7 @@ data("ny_noaa")
 ny_noaa_tidy = ny_noaa %>%
   janitor::clean_names() %>%
   separate(date, into = c("year", "month", "day"), sep = "-") %>%
+  mutate(month = as.numeric(month)) %>%
   mutate(prcp = as.numeric(prcp)/10, tmax = as.numeric(tmax)/10, tmin = as.numeric(tmin)/10)
 ```
 The most commonly observed value is 0.  This makes sennse because for most days in NY, one is unlikely to find snowfall especially in seasons other than winter.
@@ -153,16 +154,16 @@ The most commonly observed value is 0.  This makes sennse because for most days 
 ```{r}
 max_temp_plot = ny_noaa_tidy %>%
   select(id, year, month, day, tmax) %>%
-  filter(month == "January" | month == "July") %>%
   group_by(month, year) %>%
+  filter(month == 01 | month == 07) %>%
   summarize(mean_tmax = mean(tmax, na.rm = TRUE)) %>%
-  ggplot(aes(x = year, y = mean_tmax)) +
-  geom_smooth(se = FALSE) +
+  ggplot(aes(x = year, y = mean_tmax, color = factor(month))) +
+  geom_point() +
   labs(title = "Average Max Temp in Jan and July in NY (1981-2010)",
        x = "Year",
        y = "Avg Temp (C)")
 ```
-
+There does not appear to be apparent pattern in the average max temperature among the years recorded.
 
 
 ####Part 3(i) - tmax vs tmin graph
@@ -172,7 +173,7 @@ tmin_tmax_plot = ny_noaa_tidy %>%
   ggplot(aes(x = tmax, y = tmin)) + 
   geom_hex() + 
   labs(title = "Comparison of Min and Max Temperatures in NY (1981-2010)",
-       x = "Max Temp (C)",
+       x = "Max Temp (C)", 
        y = "Min Temp (C)"
        )
 ```
