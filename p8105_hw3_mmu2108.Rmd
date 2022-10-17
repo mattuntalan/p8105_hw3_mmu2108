@@ -30,7 +30,7 @@ scale_colour_discrete = scale_colour_viridis_d
 scale_fill_discrete = scale_fill_viridis_d
 ```
 
-### Problem 1
+## Problem 1
 
 #### Read in the data
 
@@ -93,38 +93,39 @@ instacart %>%
 ```
 
 
-### Problem 2
+## Problem 2
 First part- Import accelerometer data, tidy, classify weekends/weekdays, and sum activity scores
 ```{r}
 accel_tidy = read_csv("./accel_data.csv") %>%
   janitor::clean_names() %>%
   mutate(day_type = character(length = 35)) %>%
-  mutate(day_type = ifelse(day == "Saturday" | day == "Sunday", "Weekend", "Weekday")) %>%
+  mutate(day_type = ifelse(day == "Saturday" | day == "Sunday", "Weekend", "Weekday"))
+```
+
+```{r}
+accel_tidy %>%  
   mutate(total_activity = rowSums(accel_tidy[,c(4:1443)])) %>%
   select(total_activity, day_type, everything())
 ```
 
-```{r}
-
-```
-
-### Problem 3
-Load NOAA data
+## Problem 3
+####Load NOAA data
 ```{r}
 library(p8105.datasets)
 data("ny_noaa")
 ```
 
-Tidy data
+####Tidy data
 ```{r}
 ny_noaa_tidy = ny_noaa %>%
   janitor::clean_names() %>%
   separate(date, into = c("year", "month", "day"), sep = "-") %>%
   mutate(prcp = as.numeric(prcp)/10, tmax = as.numeric(tmax)/10, tmin = as.numeric(tmin)/10)
-  
 ```
+The most commonly observed value is 0.  This makes sennse because for most days in NY, one is unlikely to find snowfall especially in seasons other than winter.
 
-Part 3(i) - tmax vs tmin graph
+
+####Part 3(i) - tmax vs tmin graph
 ```{r}
 tmin_tmax_plot = ny_noaa_tidy %>%
   filter(!is.na(tmax), !is.na(tmin)) %>%
@@ -136,7 +137,7 @@ tmin_tmax_plot = ny_noaa_tidy %>%
        )
 ```
 
-Part 3(ii) - plot showing distributino of snowfall values greater than 0 and less than 100 per year
+####Part 3(ii) - plot showing distribution of snowfall values greater than 0 and less than 100 per year
 ```{r}
 snowfall_plot = ny_noaa_tidy %>%
   filter(snow > 0, snow < 100) %>%
@@ -147,7 +148,7 @@ snowfall_plot = ny_noaa_tidy %>%
        y = "Density"
        )
 ```
-Combine individual plots into two-panel plot
+####Combine individual plots into two-panel plot
 ```{r}
 tmin_tmax_plot + snowfall_plot
 ```
